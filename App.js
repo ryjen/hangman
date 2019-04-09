@@ -30,7 +30,7 @@ export default class App extends Component<Props> {
 
   }
 
-  onGuessLetter(text, index, callback) {
+  onGuessLetter(text, index) {
     if (!text) {
       return;
     }
@@ -46,13 +46,17 @@ export default class App extends Component<Props> {
       guesses += 1;
     }
 
-    this.setState({ data: items, guesses: guesses}, callback);
+    this.setState({ data: items, guesses: guesses});
   }
 
   getRandomWord() {
-    return fetch("https://random-word.ryanrk.com/api/en/word/random").then(function (response) {
-      return response.json().then( words => words[0]).catch( err => console.log(`no word ${err}`))
-    }).catch( err => console.log(`no word: ${err}`))
+    return fetch("https://random-word.ryanrk.com/api/en/word/random")
+      .then(function (response) {
+        return response.json()
+          .then( words => words[0])
+          .catch( err => console.log(`no word ${err}`))
+      })
+      .catch( err => console.log(`no word: ${err}`))
   }
 
   onNewGame() {
@@ -70,24 +74,28 @@ export default class App extends Component<Props> {
 
       this.setState({
         letters: data,
-        maxGuesses: this.calcNumberGuessesForWordLength(word.length)
+        maxGuesses: this.calcNumberGuessesForWordLength(data.length),
+        guesses: 0
       });
     });
   }
 
-  // TODO: improve
+  // TODO: improve if necessary
   calcNumberGuessesForWordLength(len) {
     if (len < MaxBodyParts) {
       return MaxBodyParts;
     }
 
+    let inc = MaxBodyParts / 2;
+
     let diff = len - MaxBodyParts;
     let value = MaxBodyParts;
 
-    while (diff > MaxBodyParts) {
-      value += MaxBodyParts / 2;
-      diff -= MaxBodyParts;
+    while (diff >= inc) {
+      value += inc;
+      diff -= inc;
     }
+
     return value;
   }
 

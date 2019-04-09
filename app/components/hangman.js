@@ -4,32 +4,41 @@ import AppContext from "../AppContext";
 
 export const MaxBodyParts = 6;
 
+const BodyPart = (props) => {
+  const { children, hide, style } = props;
+  return (
+    <View {...this.props} style={[style, {opacity: hide ? 0 : 1}]}>
+      { children }
+    </View>
+  );
+};
+
 class Hangman extends Component {
 
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
-        <View style={[styles.head, this.getVisibility(0)]} />
+        <BodyPart style={styles.head} hide={this.getVisibility(0)} />
         <View style={styles.body}>
-          <View style={[styles.leftArm, this.getVisibility(2)]} />
-          <View style={[styles.torso, this.getVisibility(1)]} />
-          <View style={[styles.rightArm, this.getVisibility(3)]} />
+          <BodyPart style={styles.leftArm} hide={this.getVisibility(2)} />
+          <BodyPart style={styles.torso} hide={this.getVisibility(1)} />
+          <BodyPart style={styles.rightArm} hide={this.getVisibility(3)} />
         </View>
         <View style={styles.footer}>
-          <View style={[styles.leftLeg, this.getVisibility(4)]} />
-          <View style={[styles.rightLeg, this.getVisibility(5)]} />
+          <BodyPart style={styles.leftLeg} hide={this.getVisibility(4)} />
+          <BodyPart style={styles.rightLeg} hide={this.getVisibility(5)} />
         </View>
       </View>
     );
   }
 
   getVisibility(pos) {
-    let max = this.context.maxGuesses % MaxBodyParts;
-    let index = this.context.guesses % pos;
+    
+    const guessesPerPart = Math.floor(this.context.maxGuesses / MaxBodyParts);
 
-    console.log(index)
+    const index = Math.floor(this.context.guesses / guessesPerPart);
 
-    return { display: (index < max) ? 'flex' : 'none' };
+    return pos >= index
   }
 }
 
