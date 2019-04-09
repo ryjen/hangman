@@ -9,10 +9,10 @@ import GallowsPole from "./app/components/gallowspole";
 import Hangman, { MaxBodyParts } from "./app/components/hangman";
 import Tiles from "./app/components/tiles";
 import AppContext from "./app/AppContext";
+import GameOver from "./app/components/GameOver";
 
 type Props = {};
 export default class App extends Component<Props> {
-
   constructor(props) {
     super(props);
 
@@ -23,11 +23,12 @@ export default class App extends Component<Props> {
       letters: [],
       guess: this.onGuessLetter,
       maxGuesses: MaxBodyParts,
-      guesses: 0
+      guesses: 0,
+      guessed: 0,
+      finished: false
     };
 
     this.onNewGame();
-
   }
 
   onGuessLetter(text, index) {
@@ -41,29 +42,40 @@ export default class App extends Component<Props> {
     items[index] = item;
 
     let guesses = this.state.guesses;
+    let guessed = this.state.guessed;
 
     if (!item.guessed) {
       guesses += 1;
+    } else {
+      guessed += 1;
     }
 
-    this.setState({ letters: items, guesses: guesses});
+    const finished =
+      guesses >= this.state.maxGuesses || guessed >= this.state.letters.length;
+
+    this.setState({
+      letters: items,
+      guesses: guesses,
+      finished: finished,
+      guessed: guessed
+    });
 
     return item.guessed;
   }
 
   getRandomWord() {
     return fetch("https://random-word.ryanrk.com/api/en/word/random")
-      .then(function (response) {
-        return response.json()
-          .then( words => words[0])
-          .catch( err => console.log(`no word ${err}`))
+      .then(function(response) {
+        return response
+          .json()
+          .then(words => words[0])
+          .catch(err => console.log(`no word ${err}`));
       })
-      .catch( err => console.log(`no word: ${err}`))
+      .catch(err => console.log(`no word: ${err}`));
   }
 
   onNewGame() {
-    this.getRandomWord().then( word => {
-
+    this.getRandomWord().then(word => {
       console.log(word);
 
       const data = [];
@@ -103,15 +115,16 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-        <AppContext.Provider value={this.state}>
-          <View style={styles.container}>
-            <View style={styles.top}>
-              <GallowsPole style={styles.pole}/>
-              <Hangman style={styles.hangman}/>
-            </View>
-            <Tiles style={styles.bottom}  />
+      <AppContext.Provider value={this.state}>
+        <View style={styles.container}>
+          <View style={styles.top}>
+            <GallowsPole style={styles.pole} />
+            <Hangman style={styles.hangman} />
+            <GameOver style={styles.status} show={this.state.finished} />
           </View>
-        </AppContext.Provider>
+          <Tiles style={styles.bottom} />
+        </View>
+      </AppContext.Provider>
     );
   }
 }
@@ -137,5 +150,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 120,
     left: 70
+  },
+  status: {
+    position: "absolute",
+    bottom: 80,
+    left: 40,
+    right: 40
   }
 });
