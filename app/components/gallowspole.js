@@ -4,12 +4,12 @@ import { StyleSheet, View } from "react-native";
 class GallowsPole extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.left}>
-          <View style={styles.pole} />
-          <View style={styles.base} />
+      <View style={[styles.container, this.props.style]}>
+        <View style={styles.pole}>
+          <View style={styles.stem} />
+          <View style={styles.arm} />
         </View>
-        <View style={styles.poleArm} />
+        <View style={styles.base} />
       </View>
     );
   }
@@ -18,42 +18,30 @@ class GallowsPole extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: "80%",
-    margin: 80,
-    borderColor: "green",
-    borderWidth: 1
-  },
-  left: {
-    borderColor: "blue",
-    borderWidth: 1,
-    flex: 1,
     flexDirection: "column",
-    alignItems: "stretch"
-  },
-  poleArm: {
-    borderTopColor: "black",
-    borderTopWidth: 3,
-    borderRightWidth: 3,
-    borderRightColor: "black",
-    flexGrow: 1,
-    height: "20%",
-    marginEnd: 80
+    justifyContent: "center"
   },
   pole: {
-    borderColor: "red",
-    borderWidth: 1,
-    borderRightColor: "black",
-    borderRightWidth: 3,
+    flex: 1,
     flexGrow: 1,
-    minWidth: 50
+    flexDirection: "row"
+  },
+  arm: {
+    borderTopColor: "black",
+    borderTopWidth: 10,
+    borderRightWidth: 10,
+    borderRightColor: "black",
+    flexBasis: 130,
+    height: 120
+  },
+  stem: {
+    borderRightColor: "black",
+    borderRightWidth: 10,
+    flexBasis: 110
   },
   base: {
     backgroundColor: "black",
-    width: "80%",
-    height: "15%"
+    height: 40
   }
 });
 
