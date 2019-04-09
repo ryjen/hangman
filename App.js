@@ -32,13 +32,13 @@ export default class App extends Component<Props> {
 
   onGuessLetter(text, index) {
     if (!text) {
-      return;
+      return false;
     }
 
-    const items = this.state.letters;
+    const items = this.state.letters.slice();
     const item = items[index];
     item.guessed = text.toUpperCase() === item.letter.toUpperCase();
-    item.letter = item.guessed ? text[0].toUpperCase() : "";
+    items[index] = item;
 
     let guesses = this.state.guesses;
 
@@ -46,7 +46,9 @@ export default class App extends Component<Props> {
       guesses += 1;
     }
 
-    this.setState({ data: items, guesses: guesses});
+    this.setState({ letters: items, guesses: guesses});
+
+    return item.guessed;
   }
 
   getRandomWord() {
@@ -67,8 +69,8 @@ export default class App extends Component<Props> {
       const data = [];
       for (let i = 0; i < word.length; i++) {
         data.push({
-          letter: word[i],
-          guessed: 0
+          letter: word[i].toUpperCase(),
+          guessed: false
         });
       }
 

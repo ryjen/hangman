@@ -5,72 +5,82 @@ import AppContext from "../AppContext";
 export const ErrorLetter = "⊘";
 
 class Tiles extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       fadeAnim: new Animated.Value(0.0),
-      guessed: -1
+      fadeItem: -1
     };
 
     this.renderTile = this.renderTile.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.guessed !== prevState.guessed && this.state.guessed !== -1) {
-      console.log("animating " + this.state.guessed);
-      this.guessedAnimation();
+    if (this.state.fadeItem !== prevState.fadeItem) {
+      this.fadeAnimation();
     }
   }
 
-  guessedAnimation() {
-      Animated.sequence([
-        Animated.timing(this.state.fadeAnim, {toValue: 1.0, duration: 500}),
-        Animated.delay(2000),
-        Animated.timing(this.state.fadeAnim,{toValue: 0.0, duration: 500})
-      ]).start(() => {
-        console.log("finished animating");
-        this.setState({ guessed: -1 })
-      });
+  fadeAnimation() {
+    if (this.state.fadeItem === -1) {
+      return;
+    }
+
+    Animated.sequence([
+      Animated.timing(this.state.fadeAnim, { toValue: 1.0, duration: 500 }),
+      Animated.delay(2000),
+      Animated.timing(this.state.fadeAnim, { toValue: 0.0, duration: 500 })
+    ]).start(() => {
+      this.setState({ fadeItem: -1 });
+    });
   }
 
   render() {
     return (
-        <View style={[styles.container, this.props.style]}>
-          <FlatList
-              horizontal
-              data={this.context.letters}
-              extraData={this.state.guessed}
-              renderItem={this.renderTile}
-              keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
+      <View style={[styles.container, this.props.style]}>
+        <FlatList
+          horizontal
+          data={this.context.letters}
+          extraData={this.state.fadeItem}
+          renderItem={this.renderTile}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
     );
   }
   renderTile(row) {
     const item = row.item;
 
-    const isGuessed = row.index === this.state.guessed;
+    const isAnimating = row.index === this.state.fadeItem;
 
     return (
-        <Animated.View style={ {opacity: isGuessed ? this.state.fadeAnim : 1.0} }>
+      <Animated.View
+        style={{ opacity: isAnimating ? this.state.fadeAnim : 1.0 }}
+      >
         <TextInput
-            editable={!item.guessed && !isGuessed}
-            maxLength={1}
-            clearTextOnFocus={true}
-            placeholder={"?"}
-            onChangeText={text => {
-              this.context.guess(text, row.index);
-              this.setState({guessed: row.index });
-            }}
-            style={[styles.letter, item.guessed ? styles.known : isGuessed ? styles.error : styles.unknown]}
-            value={item.guessed ? item.letter : isGuessed ? ErrorLetter : ""}
+          editable={!item.guessed && !isAnimating}
+          maxLength={1}
+          clearTextOnFocus={true}
+          placeholder={"?"}
+          onChangeText={text => {
+            if (!this.context.guess(text, row.index)) {
+              this.setState({ fadeItem: row.index });
+            }
+          }}
+          style={[
+            styles.letter,
+            item.guessed
+              ? styles.known
+              : isAnimating
+              ? styles.error
+              : styles.unknown
+          ]}
+          value={item.guessed ? item.letter : isAnimating ? ErrorLetter : ""}
         />
-        </Animated.View>
+      </Animated.View>
     );
   }
-
 }
 
 Tiles.contextType = AppContext;
@@ -85,13 +95,13 @@ const styles = StyleSheet.create({
     marginEnd: 3
   },
   known: {
-    color: 'black'
+    color: "black"
   },
   error: {
-    color: 'red'
+    color: "red"
   },
   unknown: {
-    color: 'black',
+    color: "black",
     borderBottomWidth: 3,
     borderBottomColor: "black"
   }
