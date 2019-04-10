@@ -94,25 +94,6 @@ export default class App extends Component<Props> {
     });
   }
 
-  // TODO: improve if necessary
-  calcNumberGuessesForWordLength(len) {
-    if (len < MaxBodyParts) {
-      return MaxBodyParts;
-    }
-
-    let inc = MaxBodyParts / 2;
-
-    let diff = len - MaxBodyParts;
-    let value = MaxBodyParts;
-
-    while (diff >= inc) {
-      value += inc;
-      diff -= inc;
-    }
-
-    return value;
-  }
-
   render() {
     return (
       <AppContext.Provider value={this.state}>

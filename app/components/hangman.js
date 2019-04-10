@@ -2,19 +2,16 @@ import React, { Component } from "react";
 import { View, StyleSheet } from "react-native";
 import AppContext from "../AppContext";
 
-export const MaxBodyParts = 6;
-
-const BodyPart = (props) => {
+const BodyPart = props => {
   const { children, hide, style } = props;
   return (
-    <View {...this.props} style={[style, {opacity: hide ? 0 : 1}]}>
-      { children }
+    <View {...this.props} style={[style, { opacity: hide ? 0 : 1 }]}>
+      {children}
     </View>
   );
 };
 
 class Hangman extends Component {
-
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
@@ -33,12 +30,11 @@ class Hangman extends Component {
   }
 
   getVisibility(pos) {
-    
     const guessesPerPart = Math.floor(this.context.maxGuesses / MaxBodyParts);
 
     const index = Math.floor(this.context.guesses / guessesPerPart);
 
-    return pos >= index
+    return pos >= index;
   }
 }
 
