@@ -1,7 +1,7 @@
 
 # Hangman
 
-A simple game of hangman in react native.
+A simple game of hangman in react native.  A hello world derivative.
 
 Summary:
 
