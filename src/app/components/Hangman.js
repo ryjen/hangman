@@ -4,6 +4,7 @@ import {StyleSheet, View} from "react-native";
 import {isBodyPartVisibleForGuess} from "app/GameLogic";
 import {AppContext} from "../AppContext";
 
+// component to display a body part of the hangman
 const BodyPart = props => {
     const {children, show, style} = props;
     return (
@@ -13,10 +14,13 @@ const BodyPart = props => {
     );
 };
 
+// component to display the entire hangman
 const Hangman = props => {
 
+    // get the app state
     const state = useContext(AppContext);
 
+    // utility function to test if a body part is visible
     function isVisible(pos) {
         return isBodyPartVisibleForGuess(pos, state.guesses, state.maxGuesses);
     }

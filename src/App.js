@@ -12,35 +12,50 @@ import {AppContext, AppContextProvider} from "app/AppContext";
 import GameOver from "components/GameOver";
 import {getRandomWord} from "app/GameLogic";
 
+// A game component
 const Game = () => {
 
+    // use a contextual state with dispatch/reducer
     const {state, dispatch} = useContext(AppContext);
 
+    // component state
     const {finished, setFinished} = useState(false);
 
+    // callback when guessing a letter
     function onGuessLetter(text, index) {
         if (!text) {
+            // nothing to do
             return false;
         }
 
+        // create a copy
         const items = state.letters.slice();
 
         const item = items[index];
 
+        // determine if guess was correct
         item.guessed = text.toUpperCase() === item.letter.toUpperCase();
 
+        // dispatch guess result to context
         dispatch({ type: item.guessed ? "guessed" : "guess"});
 
+        // dispatch new letters value to context
         dispatch({ type: "letters", payload: items});
 
+        // determine if the game is finished
         setFinished(state.guesses >= state.maxGuesses || state.guessed >= state.letters.length);
 
+        // return guessed result for immediate feedback
         return item.guessed;
     }
 
-    function onNewGame() {
+    // callback for starting a new game
+  function onNewGame() {
+
+        // get a new random word...
         getRandomWord().then(word => {
             const data = [];
+            // create the letter objects
             for (let i = 0; i < word.length; i++) {
                 data.push({
                     letter: word[i].toUpperCase(),
@@ -48,14 +63,19 @@ const Game = () => {
                 });
             }
 
+            // dispatch new word to create a game in context
             dispatch({type: "create", payload: data})
         });
     }
 
+    // start a new game when app loads
     onNewGame();
 
+    // set the guessing callback to use in context
+    // NOTE: this is a little bit wierd to me and perhaps can be refactored 
     dispatch({type: "callback", payload: onGuessLetter});
 
+    // return the view
     return (
             <View style={styles.container}>
                 <View style={styles.top}>
@@ -68,6 +88,7 @@ const Game = () => {
     );
 };
 
+// The app component has a context and a game.
 const App = () => {
     return (
         <AppContextProvider>

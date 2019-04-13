@@ -2,8 +2,10 @@
 import React, { useReducer, createContext } from "react";
 import {calcNumberGuessesForWordLength} from "./GameLogic";
 
+// create the context
 const AppContext = createContext();
 
+// the initial state of the context and the api for components
 const initialState = {
     letters: [],
     guess: () => {
@@ -13,6 +15,8 @@ const initialState = {
     guessed: 0
 };
 
+// callback to transform state on an action
+// should seem familiar if your used to redux
 const reducer  = (state, action) => {
     switch(action.type) {
         case "reset":
@@ -35,12 +39,17 @@ const reducer  = (state, action) => {
     }
 };
 
+// a context provider that automatically sets the value to provide
+// the state and dispatcher of a reducer hook
 const AppContextProvider = props => {
+    // create a reducer with callback and initial state
     const [ state, dispatch ] = useReducer(reducer, initialState);
+    // use reducer as a value for the context provider 
     const value = { state, dispatch };
     return (<AppContext.Provider value={value}>{props.children}</AppContext.Provider>);
 };
 
+// alias for the consumer to match the provider
 const AppContextConsumer = AppContext.Consumer;
 
 export { AppContext, AppContextProvider, AppContextConsumer };

@@ -4,21 +4,31 @@ import {Platform, StyleSheet, Text, View} from "react-native";
 import FontAwesome, {Icons} from "react-native-fontawesome";
 import AppContext from "app/AppContext";
 
+// determine the font awesome font name for platform
 const FAType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900";
 
+// a component to display a message if the game is over
 const GameOver = props => {
     if (!props.show) {
         return null;
     }
 
+    // get the app context
     const context = useContext(AppContext);
 
-    let message = "You survived!";
-    let icon = Icons.checkCircle;
+    // view parameters
+    let message;
+    let icon;
 
+    // if we ran out of guesses...
     if (context.guesses >= context.maxGuesses) {
+        // display death
         message = "You died!";
         icon = Icons.skull;
+    } else {
+        // othewise, you survived
+        message = "You survived!";
+        icon = Icons.checkCircle;
     }
 
     return (

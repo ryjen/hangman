@@ -3,22 +3,30 @@ import React, {useState, useContext, useEffect} from "react";
 import {Animated, FlatList, StyleSheet, TextInput, View} from "react-native";
 import {AppContext} from "app/AppContext";
 
+// the letter to display on a wrong guess
 export const ErrorLetter = "⊘";
 
+// a component to display a list of tiles for letters
 const Tiles = props => {
 
+    // component state for animation
     const [fadeAnim] = useState(new Animated.Value(0.0));
 
+    // component state for which tile to animate
     const {fadeItem, setFadeItem} = useState(-1);
 
+    // app state
     const state = useContext(AppContext);
 
+    // start the fade animation when the selected item value changes
     useEffect(() => {
         fadeAnimation();
     }, fadeItem);
 
 
+    // starts a fade animation for the component state value
     function fadeAnimation() {
+        // ignore if nothing animating
         if (fadeItem === -1) {
             return;
         }
@@ -28,13 +36,16 @@ const Tiles = props => {
             Animated.delay(2000),
             Animated.timing(fadeAnim, {toValue: 0.0, duration: 500})
         ]).start(() => {
+            // reset animated item
             setFadeItem(-1);
         });
     }
 
+    // callback to render a row in the tile list
     function renderTile(row) {
         const item = row.item;
 
+        // determine if this row is being animated
         const isAnimating = row.index === fadeItem;
 
         return (
@@ -47,7 +58,9 @@ const Tiles = props => {
                     clearTextOnFocus={true}
                     placeholder={"?"}
                     onChangeText={text => {
+                        // when text changes, try to guess
                         if (!state.guess(text, row.index)) {
+                            // if the guess is incorrect, set this row to be animated
                             setFadeItem(row.index);
                         }
                     }}
