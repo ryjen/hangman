@@ -1,6 +1,7 @@
 'use strict';
 import React, {useContext} from "react";
 import {Platform, StyleSheet, Text, View} from "react-native";
+import PropTypes from "prop-types";
 import FontAwesome, {Icons} from "react-native-fontawesome";
 import AppContext from "app/AppContext";
 
@@ -13,20 +14,17 @@ const GameOver = props => {
         return null;
     }
 
-    // get the app context
-    const context = useContext(AppContext);
-
     // view parameters
     let message;
     let icon;
 
     // if we ran out of guesses...
-    if (context.guesses >= context.maxGuesses) {
+    if (!props.won) {
         // display death
         message = "You died!";
         icon = Icons.skull;
     } else {
-        // othewise, you survived
+        // otherwise, you survived
         message = "You survived!";
         icon = Icons.checkCircle;
     }
@@ -39,6 +37,11 @@ const GameOver = props => {
             <Text style={styles.message}>{message}</Text>
         </View>
     );
+};
+
+GameOver.propTypes = {
+    show: PropTypes.bool.isRequired,
+    won: PropTypes.bool.isRequired
 };
 
 const styles = StyleSheet.create({

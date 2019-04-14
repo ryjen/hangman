@@ -3,7 +3,7 @@
  * @flow
  */
 'use strict';
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {StyleSheet, View} from "react-native";
 import GallowsPole from "components/GallowsPole";
 import Hangman from "components/Hangman";
@@ -13,23 +13,23 @@ import GameOver from "components/GameOver";
 import {getRandomWord} from "app/GameLogic";
 
 // A game component
-const Game = () => {
+const Game = props => {
 
     // use a contextual state with dispatch/reducer
-    const {state, dispatch} = useContext(AppContext);
+    const context = useContext(AppContext);
 
     // component state
-    const {finished, setFinished} = useState(false);
+    const [finished, setFinished] = useState(false);
 
     // callback when guessing a letter
-    function onGuessLetter(text, index) {
+    function onGuessLetter(text, index): Boolean {
         if (!text) {
             // nothing to do
             return false;
         }
 
         // create a copy
-        const items = state.letters.slice();
+        const items = context.state.letters.slice();
 
         const item = items[index];
 
@@ -37,13 +37,13 @@ const Game = () => {
         item.guessed = text.toUpperCase() === item.letter.toUpperCase();
 
         // dispatch guess result to context
-        dispatch({ type: item.guessed ? "guessed" : "guess"});
+        context.dispatch({ type: item.guessed ? "guessed" : "guess"});
 
         // dispatch new letters value to context
-        dispatch({ type: "letters", payload: items});
+        context.dispatch({ type: "update", payload: items});
 
         // determine if the game is finished
-        setFinished(state.guesses >= state.maxGuesses || state.guessed >= state.letters.length);
+        setFinished(context.state.guesses >= context.state.maxGuesses || context.state.guessed >= context.state.letters.length);
 
         // return guessed result for immediate feedback
         return item.guessed;
@@ -64,16 +64,12 @@ const Game = () => {
             }
 
             // dispatch new word to create a game in context
-            dispatch({type: "create", payload: data})
+            context.dispatch({type: "create", payload: data})
         });
     }
 
     // start a new game when app loads
-    onNewGame();
-
-    // set the guessing callback to use in context
-    // NOTE: this is a little bit wierd to me and perhaps can be refactored 
-    dispatch({type: "callback", payload: onGuessLetter});
+    useEffect(onNewGame, []);
 
     // return the view
     return (
@@ -81,9 +77,9 @@ const Game = () => {
                 <View style={styles.top}>
                     <GallowsPole style={styles.pole}/>
                     <Hangman style={styles.hangman}/>
-                    <GameOver style={styles.status} show={finished}/>
+                    <GameOver style={styles.status} show={finished} won={context.state.guesses < context.state.maxGuesses}/>
                 </View>
-                <Tiles style={styles.bottom}/>
+                <Tiles style={styles.bottom} onGuess={onGuessLetter}/>
             </View>
     );
 };

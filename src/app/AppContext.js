@@ -8,8 +8,6 @@ const AppContext = createContext();
 // the initial state of the context and the api for components
 const initialState = {
     letters: [],
-    guess: () => {
-    },
     maxGuesses: 0,
     guesses: 0,
     guessed: 0
@@ -34,8 +32,6 @@ const reducer  = (state, action) => {
                 guesses: 0,
                 guessed: 0
             };
-        case "callback":
-            return { ...state, guess: action.payload };
     }
 };
 

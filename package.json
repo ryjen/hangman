@@ -22,7 +22,8 @@
     "fetch-mock": "^7.3.1",
     "jest": "^24.5.0",
     "metro-react-native-babel-preset": "^0.53.1",
-    "react-test-renderer": "^16.8.6"
+    "react-test-renderer": "^16.8.6",
+    "prop-types": "latest"
   },
   "rnpm": {
     "assets": [

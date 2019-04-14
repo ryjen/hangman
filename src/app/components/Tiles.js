@@ -1,6 +1,7 @@
 'use strict';
 import React, {useState, useContext, useEffect} from "react";
 import {Animated, FlatList, StyleSheet, TextInput, View} from "react-native";
+import PropTypes from "prop-types";
 import {AppContext} from "app/AppContext";
 
 // the letter to display on a wrong guess
@@ -13,15 +14,15 @@ const Tiles = props => {
     const [fadeAnim] = useState(new Animated.Value(0.0));
 
     // component state for which tile to animate
-    const {fadeItem, setFadeItem} = useState(-1);
+    const [fadeItem, setFadeItem] = useState(-1);
 
     // app state
-    const state = useContext(AppContext);
+    const context = useContext(AppContext);
 
     // start the fade animation when the selected item value changes
     useEffect(() => {
         fadeAnimation();
-    }, fadeItem);
+    }, [fadeItem]);
 
 
     // starts a fade animation for the component state value
@@ -59,7 +60,7 @@ const Tiles = props => {
                     placeholder={"?"}
                     onChangeText={text => {
                         // when text changes, try to guess
-                        if (!state.guess(text, row.index)) {
+                        if (!props.onGuess(text, row.index)) {
                             // if the guess is incorrect, set this row to be animated
                             setFadeItem(row.index);
                         }
@@ -83,13 +84,17 @@ const Tiles = props => {
         <View style={[styles.container, props.style]}>
             <FlatList
                 horizontal
-                data={state.letters}
+                data={context.state.letters}
                 extraData={fadeItem}
                 renderItem={renderTile}
                 keyExtractor={(item, index) => index.toString()}
             />
         </View>
     );
+};
+
+Tiles.propTypes =  {
+    onGuess: PropTypes.func.isRequired
 };
 
 const styles = StyleSheet.create({
