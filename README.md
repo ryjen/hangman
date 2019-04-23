@@ -3,11 +3,6 @@
 
 A simple game of hangman in react native.  A hello world derivative.
 
-Summary:
-
-* Using hooks improves readability and squashes a lot of lines of code.
-* Using context is a win over an extra redux library.  Combined with hooks, follows some of the same principles if needed.
-
 # Todo
 
 * [ ] better word api
