@@ -1,12 +1,12 @@
 "use strict"
 
 // the number of body parts before the hangman is complete
-export const MaxBodyParts = 6
+const MaxBodyParts = 6
 
 // Calculates how many guesses given a word length
 // The default and minimum is the number of body parts
 // TODO: improve if necessary
-export function calcNumberGuessesForWordLength(len, defaultLen = MaxBodyParts) {
+const calcNumberGuessesForWordLength = (len: number, defaultLen: number = MaxBodyParts): number => {
 
     // ensure default is minimum
     if (len < defaultLen) {
@@ -37,7 +37,7 @@ export function calcNumberGuessesForWordLength(len, defaultLen = MaxBodyParts) {
 // @param part the body part index to test for visibility
 // @param guesses the current number of missed guesses
 // @param maxGuesses the maximum allowed missed guesses
-export function isBodyPartVisibleForGuess(part, guesses, maxGuesses) {
+const isBodyPartVisibleForGuess = (part: number, guesses: number, maxGuesses: number): boolean => {
 
     // determine the number of guesses allowed for each body part
     const guessesPerPart = Math.floor(maxGuesses / MaxBodyParts)
@@ -50,11 +50,18 @@ export function isBodyPartVisibleForGuess(part, guesses, maxGuesses) {
 }
 
 // gets a random word from an api
-export function getRandomWord() {
+const getRandomWord = (): Promise<string> => {
     return fetch("https://random-word.ryanrk.com/api/en/word/random")
-        .then(function (response) {
+        .then(response => {
             return response
                 .json()
                 .then(words => words[0])
         })
+}
+
+export default {
+    MaxBodyParts,
+    calcNumberGuessesForWordLength,
+    isBodyPartVisibleForGuess,
+    getRandomWord
 }

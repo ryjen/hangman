@@ -1,33 +1,23 @@
 "use strict"
 import React, {useContext} from "react"
 import {StyleSheet, View} from "react-native"
-import PropTypes from "prop-types"
-import {isBodyPartVisibleForGuess} from "app/GameLogic"
-import {AppContext} from "../AppContext"
+import Logic from "app/Logic"
+import {Context as AppContext} from "app/Context"
+import BodyPart from "components/BodyPart"
 
-// component to display a body part of the hangman
-const BodyPart = props => {
-    const {children, show, style} = props
-    return (
-        <View {...props} style={[style, {opacity: show ? 1 : 0}]}>
-            {children}
-        </View>
-    )
-}
-
-BodyPart.propTypes = {
-    show: PropTypes.bool.isRequired
+type Props = {
+    style?: StyleSheet.ViewStyleProp
 }
 
 // component to display the entire hangman
-const Hangman = props => {
+const Hangman = (props: Props) => {
 
     // get the app state
     const context = useContext(AppContext)
 
     // utility function to test if a body part is visible
     function isVisible(pos) {
-        return isBodyPartVisibleForGuess(pos, context.state.guesses, context.state.maxGuesses)
+        return Logic.isBodyPartVisibleForGuess(pos, context.state.guesses, context.state.maxGuesses)
     }
 
     return (

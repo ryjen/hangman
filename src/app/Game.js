@@ -1,12 +1,13 @@
 "use strict"
 import React, {useContext, useEffect, useState} from "react"
-import {StyleSheet, View} from "react-native"
+import {StyleSheet, View, Alert} from "react-native"
 import GallowsPole from "components/GallowsPole"
 import Hangman from "components/Hangman"
 import Tiles from "components/Tiles"
-import {AppContext, AppContextProvider} from "app/AppContext"
+import {Context as AppContext} from "app/Context"
 import GameOver from "components/GameOver"
-import {getRandomWord} from "app/GameLogic"
+import Logic from "app/Logic"
+import {Create,Guess,Update} from "actions"
 
 // A game component
 const Game = () => {
@@ -33,10 +34,10 @@ const Game = () => {
         item.guessed = text.toUpperCase() === item.letter.toUpperCase()
 
         // dispatch guess result to context
-        context.dispatch({type: item.guessed ? "guessed" : "guess"})
+        context.dispatch(item.guessed ? Guess.correct() : Guess.wrong())
 
         // dispatch new letters value to context
-        context.dispatch({type: "update", payload: items})
+        context.dispatch(Update.tiles(items))
 
         // determine if the game is finished
         setFinished(context.state.guesses >= context.state.maxGuesses || context.state.guessed >= context.state.letters.length)
@@ -46,10 +47,10 @@ const Game = () => {
     }
 
     // callback for starting a new game
-    function onNewGame() {
+    const onNewGame = () => {
 
         // get a new random word...
-        getRandomWord().then(word => {
+        Logic.getRandomWord().then(word => {
             const data = []
             // create the letter objects
             for (let i = 0; i < word.length; i++) {
@@ -60,7 +61,9 @@ const Game = () => {
             }
 
             // dispatch new word to create a game in context
-            context.dispatch({type: "create", payload: data})
+            context.dispatch(Create.tiles(data))
+        }, error => {
+            Alert.alert("Network Error", error)
         })
     }
 
@@ -77,15 +80,6 @@ const Game = () => {
             </View>
             <Tiles style={styles.bottom} onGuess={onGuessLetter}/>
         </View>
-    )
-}
-
-// The app component has a context and a game.
-const App = () => {
-    return (
-        <AppContextProvider>
-            <Game/>
-        </AppContextProvider>
     )
 }
 
@@ -119,4 +113,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default App
+export default Game

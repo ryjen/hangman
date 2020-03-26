@@ -65,6 +65,7 @@ module.exports = {
         "import/namespace": 2,
         "import/default": 2,
         "import/export": 2,
-        "module-resolver/use-alias": 2
+        "module-resolver/use-alias": 2,
+        "flowtype/no-types-missing-file-annotation": 0
     }
 }

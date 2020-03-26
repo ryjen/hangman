@@ -1,14 +1,19 @@
 "use strict"
 import React from "react"
 import {Platform, StyleSheet, Text, View} from "react-native"
-import PropTypes from "prop-types"
 import FontAwesome, {Icons} from "react-native-fontawesome"
 
 // determine the font awesome font name for platform
-const FAType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900"
+const IconType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900"
+
+type Props = {
+    show: boolean,
+    won: boolean,
+    style?: StyleSheet.ViewStyleProp
+}
 
 // a component to display a message if the game is over
-const GameOver = props => {
+const GameOver = (props: Props) => {
     if (!props.show) {
         return null
     }
@@ -30,17 +35,12 @@ const GameOver = props => {
 
     return (
         <View style={[styles.container, props.style]}>
-            <FontAwesome type={FAType} style={styles.icon}>
+            <FontAwesome type={IconType} style={styles.icon}>
                 {icon}
             </FontAwesome>
             <Text style={styles.message}>{message}</Text>
         </View>
     )
-}
-
-GameOver.propTypes = {
-    show: PropTypes.bool.isRequired,
-    won: PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({

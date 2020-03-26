@@ -2,8 +2,12 @@
 import React from "react"
 import {StyleSheet, View} from "react-native"
 
+type Props = {
+    style?: StyleSheet.ViewStyleProp
+}
+
 // a component to render the pole from which the hangman hangs
-const GallowsPole = props => {
+const GallowsPole = (props: Props) => {
     return (
         <View style={[styles.container, props.style]}>
             <View style={styles.pole}>
