@@ -1,6 +1,6 @@
-'use strict';
-import React from "react";
-import {StyleSheet, View} from "react-native";
+"use strict"
+import React from "react"
+import {StyleSheet, View} from "react-native"
 
 // a component to render the pole from which the hangman hangs
 const GallowsPole = props => {
@@ -12,8 +12,8 @@ const GallowsPole = props => {
             </View>
             <View style={styles.base}/>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         height: 40
     }
-});
+})
 
-export default GallowsPole;
+export default GallowsPole

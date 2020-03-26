@@ -1,35 +1,35 @@
-'use strict';
-import React, {useState, useContext, useEffect} from "react";
-import {Animated, FlatList, StyleSheet, TextInput, View} from "react-native";
-import PropTypes from "prop-types";
-import {AppContext} from "app/AppContext";
+"use strict"
+import React, {useContext, useEffect, useState} from "react"
+import {Animated, FlatList, StyleSheet, TextInput, View} from "react-native"
+import PropTypes from "prop-types"
+import {AppContext} from "app/AppContext"
 
 // the letter to display on a wrong guess
-export const ErrorLetter = "⊘";
+export const ErrorLetter = "⊘"
 
 // a component to display a list of tiles for letters
 const Tiles = props => {
 
     // component state for animation
-    const [fadeAnim] = useState(new Animated.Value(0.0));
+    const [fadeAnim] = useState(new Animated.Value(0.0))
 
     // component state for which tile to animate
-    const [fadeItem, setFadeItem] = useState(-1);
+    const [fadeItem, setFadeItem] = useState(-1)
 
     // app state
-    const context = useContext(AppContext);
+    const context = useContext(AppContext)
 
     // start the fade animation when the selected item value changes
     useEffect(() => {
-        fadeAnimation();
-    }, [fadeItem]);
+        fadeAnimation()
+    }, [fadeItem])
 
 
     // starts a fade animation for the component state value
     function fadeAnimation() {
         // ignore if nothing animating
         if (fadeItem === -1) {
-            return;
+            return
         }
 
         Animated.sequence([
@@ -38,16 +38,16 @@ const Tiles = props => {
             Animated.timing(fadeAnim, {toValue: 0.0, duration: 500})
         ]).start(() => {
             // reset animated item
-            setFadeItem(-1);
-        });
+            setFadeItem(-1)
+        })
     }
 
     // callback to render a row in the tile list
     function renderTile(row) {
-        const item = row.item;
+        const item = row.item
 
         // determine if this row is being animated
-        const isAnimating = row.index === fadeItem;
+        const isAnimating = row.index === fadeItem
 
         return (
             <Animated.View
@@ -62,7 +62,7 @@ const Tiles = props => {
                         // when text changes, try to guess
                         if (!props.onGuess(text, row.index)) {
                             // if the guess is incorrect, set this row to be animated
-                            setFadeItem(row.index);
+                            setFadeItem(row.index)
                         }
                     }}
                     style={[
@@ -70,13 +70,13 @@ const Tiles = props => {
                         item.guessed
                             ? styles.known
                             : isAnimating
-                            ? styles.error
-                            : styles.unknown
+                                ? styles.error
+                                : styles.unknown
                     ]}
                     value={item.guessed ? item.letter : isAnimating ? ErrorLetter : ""}
                 />
             </Animated.View>
-        );
+        )
     }
 
 
@@ -90,12 +90,12 @@ const Tiles = props => {
                 keyExtractor={(item, index) => index.toString()}
             />
         </View>
-    );
-};
+    )
+}
 
-Tiles.propTypes =  {
+Tiles.propTypes = {
     onGuess: PropTypes.func.isRequired
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -117,6 +117,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 3,
         borderBottomColor: "black"
     }
-});
+})
 
-export default Tiles;
+export default Tiles

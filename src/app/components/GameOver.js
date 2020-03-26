@@ -1,32 +1,31 @@
-'use strict';
-import React, {useContext} from "react";
-import {Platform, StyleSheet, Text, View} from "react-native";
-import PropTypes from "prop-types";
-import FontAwesome, {Icons} from "react-native-fontawesome";
-import AppContext from "app/AppContext";
+"use strict"
+import React from "react"
+import {Platform, StyleSheet, Text, View} from "react-native"
+import PropTypes from "prop-types"
+import FontAwesome, {Icons} from "react-native-fontawesome"
 
 // determine the font awesome font name for platform
-const FAType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900";
+const FAType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900"
 
 // a component to display a message if the game is over
 const GameOver = props => {
     if (!props.show) {
-        return null;
+        return null
     }
 
     // view parameters
-    let message;
-    let icon;
+    let message
+    let icon
 
     // if we ran out of guesses...
     if (!props.won) {
         // display death
-        message = "You died!";
-        icon = Icons.skull;
+        message = "You died!"
+        icon = Icons.skull
     } else {
         // otherwise, you survived
-        message = "You survived!";
-        icon = Icons.checkCircle;
+        message = "You survived!"
+        icon = Icons.checkCircle
     }
 
     return (
@@ -36,13 +35,13 @@ const GameOver = props => {
             </FontAwesome>
             <Text style={styles.message}>{message}</Text>
         </View>
-    );
-};
+    )
+}
 
 GameOver.propTypes = {
     show: PropTypes.bool.isRequired,
     won: PropTypes.bool.isRequired
-};
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -60,6 +59,6 @@ const styles = StyleSheet.create({
     message: {
         fontSize: 50
     }
-});
+})
 
-export default GameOver;
+export default GameOver

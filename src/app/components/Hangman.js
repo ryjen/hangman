@@ -1,33 +1,33 @@
-'use strict';
-import React, {useContext} from "react";
-import {StyleSheet, View} from "react-native";
-import PropTypes from "prop-types";
-import {isBodyPartVisibleForGuess} from "app/GameLogic";
-import {AppContext} from "../AppContext";
+"use strict"
+import React, {useContext} from "react"
+import {StyleSheet, View} from "react-native"
+import PropTypes from "prop-types"
+import {isBodyPartVisibleForGuess} from "app/GameLogic"
+import {AppContext} from "../AppContext"
 
 // component to display a body part of the hangman
 const BodyPart = props => {
-    const {children, show, style} = props;
+    const {children, show, style} = props
     return (
         <View {...props} style={[style, {opacity: show ? 1 : 0}]}>
             {children}
         </View>
-    );
-};
+    )
+}
 
 BodyPart.propTypes = {
-  show: PropTypes.bool.isRequired
-};
+    show: PropTypes.bool.isRequired
+}
 
 // component to display the entire hangman
 const Hangman = props => {
 
     // get the app state
-    const context = useContext(AppContext);
+    const context = useContext(AppContext)
 
     // utility function to test if a body part is visible
     function isVisible(pos) {
-        return isBodyPartVisibleForGuess(pos, context.state.guesses, context.state.maxGuesses);
+        return isBodyPartVisibleForGuess(pos, context.state.guesses, context.state.maxGuesses)
     }
 
     return (
@@ -43,8 +43,8 @@ const Hangman = props => {
                 <BodyPart style={styles.rightLeg} show={isVisible(5)}/>
             </View>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -114,6 +114,6 @@ const styles = StyleSheet.create({
         top: 20,
         left: -12
     }
-});
+})
 
-export default Hangman;
+export default Hangman

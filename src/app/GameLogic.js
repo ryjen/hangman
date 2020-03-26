@@ -1,36 +1,36 @@
-'use strict';
+"use strict"
 
 // the number of body parts before the hangman is complete
-export const MaxBodyParts = 6;
+export const MaxBodyParts = 6
 
 // Calculates how many guesses given a word length
 // The default and minimum is the number of body parts
 // TODO: improve if necessary
 export function calcNumberGuessesForWordLength(len, defaultLen = MaxBodyParts) {
-    
+
     // ensure default is minimum
     if (len < defaultLen) {
-        return defaultLen;
+        return defaultLen
     }
 
     // the increment is half the default
-    let inc = defaultLen / 2;
+    let inc = defaultLen / 2
 
     // how much over the default length is the word?
-    let diff = len - defaultLen;
+    let diff = len - defaultLen
 
     // the return value after processing
-    let value = defaultLen;
+    let value = defaultLen
 
     // while we are over the default value...
     while (diff >= inc) {
         // add the increment to the return value
-        value += inc;
+        value += inc
         // and subtract the increment from the difference
-        diff -= inc;
+        diff -= inc
     }
 
-    return value;
+    return value
 }
 
 // tests if a body part is visible given the ratio of guesses to allowed guesses
@@ -40,13 +40,13 @@ export function calcNumberGuessesForWordLength(len, defaultLen = MaxBodyParts) {
 export function isBodyPartVisibleForGuess(part, guesses, maxGuesses) {
 
     // determine the number of guesses allowed for each body part
-    const guessesPerPart = Math.floor(maxGuesses / MaxBodyParts);
+    const guessesPerPart = Math.floor(maxGuesses / MaxBodyParts)
 
     // determine the body part index for the missed guesses
-    const index = Math.floor(guesses / guessesPerPart);
+    const index = Math.floor(guesses / guessesPerPart)
 
     // determine if the body part to view is less than missed guesses index
-    return part < index;
+    return part < index
 }
 
 // gets a random word from an api
