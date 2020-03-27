@@ -1,7 +1,8 @@
+import Payload from "types/Payload"
 
-type Action<T> = {
+type Action<ValueType> = {
     type: string,
-    payload: T
+    payload: Payload<ValueType>
 }
 
 export default Action

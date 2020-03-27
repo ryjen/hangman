@@ -23,6 +23,8 @@ const reducer = (state: State, action: Action) => {
         return Update.reduce(state, action.payload)
     case Create.type:
         return Create.reduce(state, action.payload)
+    default:
+        return state
     }
 }
 

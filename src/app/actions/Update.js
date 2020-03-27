@@ -22,7 +22,7 @@ const Action = (id: string, value?: any): UpdateAction => ({
     payload: { id, value }
 })
 
-const reducer = (state: State, payload: UpdatePayload) => {
+const reduce = (state: State, payload: UpdatePayload) => {
     switch(payload.id) {
     case tiles:
         return {...state, letters: payload.value}
@@ -40,5 +40,5 @@ export default {
     guessed: () => Action(guessed),
     guesses: () => Action(guesses),
     reset: () => Action(reset),
-    reducer
+    reduce
 }

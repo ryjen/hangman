@@ -62,10 +62,10 @@ untyped-type-import=warn
 nonstrict-import=warn
 deprecated-type=warn
 unsafe-getters-setters=warn
-inexact-spread=warn
 unnecessary-invariant=warn
 signature-verification-failure=warn
 deprecated-utility=error
+
 [strict]
 deprecated-type
 nonstrict-import
@@ -76,4 +76,4 @@ untyped-import
 untyped-type-import
 
 [version]
-^0.105.0
+^0.121.0

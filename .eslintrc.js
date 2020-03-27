@@ -6,8 +6,6 @@ module.exports = {
     },
     "extends": [
         "eslint:recommended",
-        "plugin:import/errors",
-        "plugin:import/warnings",
         "plugin:react/recommended",
         "plugin:flowtype/recommended"
     ],
@@ -60,11 +58,6 @@ module.exports = {
         "react-native/no-inline-styles": 2,
         "react-native/no-single-element-style-arrays": 2,
         "react-native/split-platform-components": 2,
-        "import/no-unresolved": 2,
-        "import/named": 2,
-        "import/namespace": 2,
-        "import/default": 2,
-        "import/export": 2,
         "module-resolver/use-alias": 2,
         "flowtype/no-types-missing-file-annotation": 0
     }

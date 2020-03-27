@@ -1,10 +1,7 @@
 "use strict"
 import React from "react"
-import {Platform, StyleSheet, Text, View} from "react-native"
-import FontAwesome, {Icons} from "react-native-fontawesome"
-
-// determine the font awesome font name for platform
-const IconType = Platform.OS === "ios" ? "Font Awesome 5 Free" : "fa_solid_900"
+import {StyleSheet, Text, View} from "react-native"
+import FontAwesomeIcon from "@fortawesome/react-fontawesome"
 
 type Props = {
     show: boolean,
@@ -26,18 +23,16 @@ const GameOver = (props: Props) => {
     if (!props.won) {
         // display death
         message = "You died!"
-        icon = Icons.skull
+        icon = "skull"
     } else {
         // otherwise, you survived
         message = "You survived!"
-        icon = Icons.checkCircle
+        icon = "checkCircle"
     }
 
     return (
         <View style={[styles.container, props.style]}>
-            <FontAwesome type={IconType} style={styles.icon}>
-                {icon}
-            </FontAwesome>
+            <FontAwesomeIcon icon={icon} style={styles.icon} />
             <Text style={styles.message}>{message}</Text>
         </View>
     )
